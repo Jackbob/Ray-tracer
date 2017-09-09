@@ -1,0 +1,3 @@
+C:/Users/Jakob/Documents/TNCG15 Project/TNCG15/cmake-build-debug/CMakeFiles/TNCG15.dir
+C:/Users/Jakob/Documents/TNCG15 Project/TNCG15/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Jakob/Documents/TNCG15 Project/TNCG15/cmake-build-debug/CMakeFiles/rebuild_cache.dir
