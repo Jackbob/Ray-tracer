@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/TNCG15.dir/main.cpp.obj"
+  "CMakeFiles/TNCG15.dir/ray.cpp.obj"
   "TNCG15.pdb"
   "TNCG15.exe"
   "TNCG15.exe.manifest"
