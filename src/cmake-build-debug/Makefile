@@ -122,6 +122,33 @@ Ray-tracer/fast:
 	$(MAKE) -f CMakeFiles\Ray-tracer.dir\build.make CMakeFiles/Ray-tracer.dir/build
 .PHONY : Ray-tracer/fast
 
+camera.obj: camera.cpp.obj
+
+.PHONY : camera.obj
+
+# target to build an object file
+camera.cpp.obj:
+	$(MAKE) -f CMakeFiles\Ray-tracer.dir\build.make CMakeFiles/Ray-tracer.dir/camera.cpp.obj
+.PHONY : camera.cpp.obj
+
+camera.i: camera.cpp.i
+
+.PHONY : camera.i
+
+# target to preprocess a source file
+camera.cpp.i:
+	$(MAKE) -f CMakeFiles\Ray-tracer.dir\build.make CMakeFiles/Ray-tracer.dir/camera.cpp.i
+.PHONY : camera.cpp.i
+
+camera.s: camera.cpp.s
+
+.PHONY : camera.s
+
+# target to generate assembly for a file
+camera.cpp.s:
+	$(MAKE) -f CMakeFiles\Ray-tracer.dir\build.make CMakeFiles/Ray-tracer.dir/camera.cpp.s
+.PHONY : camera.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -212,6 +239,9 @@ help:
 	@echo ... Ray-tracer
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... camera.obj
+	@echo ... camera.i
+	@echo ... camera.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
