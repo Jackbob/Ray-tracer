@@ -10,12 +10,12 @@
 
 class ray {
 private:
+
+
+public:
     glm::vec4 startPoint;
     glm::vec4 endPoint;
     glm::dvec3 rayColor;
-
-public:
-
 
 };
 
