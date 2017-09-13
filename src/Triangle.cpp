@@ -5,7 +5,7 @@
 #include "Triangle.h"
 
 
-Triangle::Triangle(glm::vec4 &v1, glm::vec4 &v2, glm::vec4 &v3, glm::dvec3 &c):
+Triangle::Triangle(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3, glm::dvec3 c):
 vertex1{v1}, vertex2{v2}, vertex3{v3}, color{c}, normal{getNormal(v1,v2,v3)}
 {
 

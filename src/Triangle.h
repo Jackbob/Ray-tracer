@@ -20,7 +20,7 @@ public:
 
     //Constructor
     Triangle()  = default;
-    Triangle(glm::vec4 &v1, glm::vec4 &v2, glm::vec4 &v3, glm::dvec3 &c);
+    Triangle(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3, glm::dvec3 c);
 
     glm::vec3 getNormal(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3);
 
