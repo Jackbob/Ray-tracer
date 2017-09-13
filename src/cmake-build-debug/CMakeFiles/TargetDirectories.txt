@@ -1,3 +1,0 @@
-C:/Users/Jakob/Documents/TNCG15 Project/Ray-tracer/src/cmake-build-debug/CMakeFiles/Ray-tracer.dir
-C:/Users/Jakob/Documents/TNCG15 Project/Ray-tracer/src/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Jakob/Documents/TNCG15 Project/Ray-tracer/src/cmake-build-debug/CMakeFiles/rebuild_cache.dir
