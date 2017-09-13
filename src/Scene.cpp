@@ -17,3 +17,9 @@ void Scene::intersectedTriangle() {
         }
     }
 }
+
+void Scene::createRoom() {
+
+
+
+}

@@ -10,16 +10,17 @@
 #include "Triangle.h"
 
 class Scene {
+
 private:
     std::vector<Triangle> triangles;
 
 public:
-    Scene()
-    {
 
-    }
+    Scene();
 
     void intersectedTriangle();
+
+    void createRoom();
 
 
 
