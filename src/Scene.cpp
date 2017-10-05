@@ -9,11 +9,12 @@ Scene::Scene()
 
 }
 
-void Scene::intersectedTriangle() {
+void Scene::intersectedTriangle(ray rayarg) {
 
     {
         for(auto i:triangles)
         {
+            i.rayIntersection(rayarg);
         }
     }
 }

@@ -17,6 +17,8 @@ public:
     glm::vec4 endPoint;
     glm::dvec3 rayColor;
 
+    ray(glm::vec4 start, glm::vec4 end, glm::dvec3 color);
+
 };
 
 

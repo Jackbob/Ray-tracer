@@ -8,6 +8,7 @@
 
 #include <vector>
 #include "Triangle.h"
+#include "ray.h"
 
 class Scene {
 
@@ -18,7 +19,7 @@ public:
 
     Scene();
 
-    void intersectedTriangle();
+    void intersectedTriangle(ray rayarg);
 
     void createRoom();
 
