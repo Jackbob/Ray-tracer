@@ -8,3 +8,4 @@ double pixel::getIntensity()
 {
     return std::max(std::max(pixelColor.x, pixelColor.y), pixelColor.z);
 }
+

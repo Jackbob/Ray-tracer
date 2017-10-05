@@ -6,10 +6,24 @@
 
 camera::camera() {
 
-}
+    pixels.resize(HEIGHT);
+    for(auto h: pixels)
+        h.resize(WIDTH);
 
-camera::~camera() {
+    pixelplane[0] = glm::vec4(0.0f,  1.0f, 1.0f, 1.0f);
+    pixelplane[1] = glm::vec4(0.0f, -1.0f, 1.0f, 1.0f);
+    pixelplane[2] = glm::vec4(0.0f, 1.0f, -1.0f, 1.0f);
+    pixelplane[3] = glm::vec4(0.0f,-1.0f, -1.0f, 1.0f);
 
+    planeWidthAxis = (pixelplane[1] - pixelplane[0]);
+    planeHeigthAxis = (pixelplane[2] - pixelplane[0]);
+
+    pixelStep = glm::length(planeHeigthAxis) / HEIGHT;
+
+    planeWidthAxis = glm::normalize(planeWidthAxis);
+    planeHeigthAxis = glm::normalize(planeHeigthAxis);
+
+    std::cout << pixelStep << std::endl;
 }
 
 void camera::render() {
@@ -17,6 +31,7 @@ void camera::render() {
 }
 
 void camera::createImage() {
+
     double imax = findimax();
     double truncValue = 259.99/imax;
 
@@ -27,9 +42,11 @@ void camera::createImage() {
             pixels[h][w].pixelColor *= truncValue;
         }
     }
+
 }
 
 double camera::findimax() {
+
     double imax = 0;
 
     for(int h = 0;h<WIDTH;h++)
@@ -43,4 +60,12 @@ double camera::findimax() {
     }
 
     return imax;
+}
+
+glm::vec4 camera::getPixelPos(int h, int w) {
+
+    glm::vec4 pixelPos = pixelplane[0] + (planeWidthAxis * (w * pixelStep - pixelStep/2));
+    pixelPos += planeHeigthAxis * (h * pixelStep - pixelStep/2);
+    return pixelPos;
+
 }

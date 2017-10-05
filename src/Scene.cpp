@@ -4,10 +4,6 @@
 
 #include "Scene.h"
 
-Scene::Scene()
-{
-
-}
 
 void Scene::intersectedTriangle(ray rayarg) {
 

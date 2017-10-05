@@ -19,9 +19,9 @@ glm::vec4 Triangle::rayIntersection(ray rayarg)
     glm::vec3 pvec = glm::cross(raydir, v1v3);
     float det = glm::dot(v1v2, pvec);
     // if the determinant is negative the triangle is backfacing
-// if the determinant is close to 0, the ray misses the triangle
+    // if the determinant is close to 0, the ray misses the triangle
     if (det < FLT_EPSILON) return glm::vec4(0.0f, 0.0f, 0.0f, -1.0f);
-// ray and triangle are parallel if det is close to 0
+    // ray and triangle are parallel if det is close to 0
     if (fabs(det) < FLT_EPSILON) return glm::vec4(0.0f, 0.0f, 0.0f, -1.0f);
 
     float invDet = 1 / det;

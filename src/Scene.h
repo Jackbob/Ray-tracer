@@ -17,7 +17,8 @@ private:
 
 public:
 
-    Scene();
+    Scene() = default;
+    ~Scene()  = default;
 
     void intersectedTriangle(ray rayarg);
 

@@ -7,5 +7,5 @@
 ray::ray(glm::vec4 start, glm::vec4 end, glm::dvec3 color)
     : endPoint{end}, startPoint{start}, rayColor{color}
 {
-
 }
+
