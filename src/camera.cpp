@@ -6,9 +6,9 @@
 
 camera::camera() {
 
-    pixels.resize(HEIGHT);
+    pixels.resize(SCREEN_HEIGHT);
     for(auto h: pixels)
-        h.resize(WIDTH);
+        h.resize(SCREEN_WIDTH);
 
     pixelplane[0] = glm::vec4(0.0f,  1.0f, 1.0f, 1.0f);
     pixelplane[1] = glm::vec4(0.0f, -1.0f, 1.0f, 1.0f);
@@ -18,7 +18,7 @@ camera::camera() {
     planeWidthAxis = (pixelplane[1] - pixelplane[0]);
     planeHeigthAxis = (pixelplane[2] - pixelplane[0]);
 
-    pixelStep = glm::length(planeHeigthAxis) / HEIGHT;
+    pixelStep = glm::length(planeHeigthAxis) / SCREEN_HEIGHT;
 
     planeWidthAxis = glm::normalize(planeWidthAxis);
     planeHeigthAxis = glm::normalize(planeHeigthAxis);
@@ -27,7 +27,11 @@ camera::camera() {
 }
 
 void camera::render() {
-
+    for(int h=1; h<= SCREEN_HEIGHT; h++){
+        for(int w=1;w <= SCREEN_WIDTH; w++){
+            pixels[h][w].pixelRay = new ray(eye1, getPixelPos(h,w), glm::dvec3(1.0,1.0,1.0));
+        }
+    }
 }
 
 void camera::createImage() {
@@ -35,9 +39,9 @@ void camera::createImage() {
     double imax = findimax();
     double truncValue = 259.99/imax;
 
-    for(int h = 0;h<WIDTH;h++)
+    for(int h = 0;h<SCREEN_WIDTH;h++)
     {
-        for(int w = 0;w<WIDTH;w++)
+        for(int w = 0;w<SCREEN_WIDTH;w++)
         {
             pixels[h][w].pixelColor *= truncValue;
         }
@@ -49,9 +53,9 @@ double camera::findimax() {
 
     double imax = 0;
 
-    for(int h = 0;h<WIDTH;h++)
+    for(int h = 0;h<SCREEN_WIDTH;h++)
     {
-        for(int w = 0;w<WIDTH;w++)
+        for(int w = 0;w<SCREEN_WIDTH;w++)
         {
             double pIntensity = pixels[h][w].getIntensity();
             if(imax < pIntensity)

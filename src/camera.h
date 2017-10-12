@@ -10,8 +10,8 @@
 #include <vector>
 #include <iostream>
 
-#define WIDTH 1000
-#define HEIGHT 1000
+#define SCREEN_WIDTH 1000
+#define SCREEN_HEIGHT 1000
 
 class camera {
 private:

@@ -3,6 +3,12 @@
 #include "ray.h"
 #include "camera.h"
 #include <glm/glm.hpp>
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
+#include <fstream>
+#include "openglfunc.h"
+
+GLFWwindow* window;
 
 int main() {
 
@@ -24,6 +30,30 @@ int main() {
 
     std::cout << pixelPos.x << " " << pixelPos.y << " " << pixelPos.z << std::endl;
 
+    /*
+    initOpenGL(window);
+    // Create and compile our GLSL program from the shaders
+    GLuint programID = LoadShaders( "vertex.glsl", "fragment.glsl" );
+
+
+    do{
+        // Draw nothing, see you in tutorial 2 !
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glUseProgram(programID);
+        drawQuad();
+
+        // Swap buffers
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+
+    } // Check if the ESC key was pressed or the window was closed
+    while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
+           glfwWindowShouldClose(window) == 0 );
+    */
+
 
     return 0;
 }
+
+
