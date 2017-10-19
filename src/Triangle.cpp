@@ -20,19 +20,23 @@ glm::vec4 Triangle::rayIntersection(ray rayarg)
     float det = glm::dot(v1v2, pvec);
     // if the determinant is negative the triangle is backfacing
     // if the determinant is close to 0, the ray misses the triangle
-    if (det < FLT_EPSILON) return glm::vec4(0.0f, 0.0f, 0.0f, -1.0f);
+    if (det < FLT_EPSILON)
+        return glm::vec4(0.0f, 0.0f, 0.0f, -1.0f);
     // ray and triangle are parallel if det is close to 0
-    if (fabs(det) < FLT_EPSILON) return glm::vec4(0.0f, 0.0f, 0.0f, -1.0f);
+    if (fabs(det) < FLT_EPSILON)
+        return glm::vec4(0.0f, 0.0f, 0.0f, -1.0f);
 
     float invDet = 1 / det;
 
     glm::vec3 tvec = rayarg.startPoint - vertex1;
     float u = glm::dot(tvec, pvec) * invDet;
-    if (u < 0 || u > 1) return glm::vec4(0.0f, 0.0f, 0.0f, -1.0f);
+    if (u < 0 || u > 1)
+        return glm::vec4(0.0f, 0.0f, 0.0f, -1.0f);
 
     glm::vec3 qvec = glm::cross(tvec, v1v2);
     float v = glm::dot(raydir, qvec) * invDet;
-    if (v < 0 || u + v > 1) return glm::vec4(0.0f, 0.0f, 0.0f, -1.0f);
+    if (v < 0 || u + v > 1)
+        return glm::vec4(0.0f, 0.0f, 0.0f, -1.0f);
 
     float t = glm::dot(v1v3, qvec) * invDet;
 
@@ -46,4 +50,8 @@ glm::vec3 Triangle::getNormal(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3) {
     glm::vec3 c = glm::vec3(v3.x, v3.y, v3.z);
 
     return glm::normalize(glm::cross(c-a, b-a));
+}
+
+glm::dvec3 Triangle::getColor() {
+    return color;
 }

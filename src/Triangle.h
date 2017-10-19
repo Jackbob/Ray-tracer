@@ -30,6 +30,7 @@ public:
     /*should compute the intersection between a ray and a triangle
       with the Möller- Trumbore algorithm*/
     glm::vec4 rayIntersection(ray rayarg);
+    glm::dvec3 getColor();
 };
 
 

@@ -9,6 +9,8 @@
 #include "pixel.h"
 #include <vector>
 #include <iostream>
+#include <GL/glew.h>
+#include "Scene.h"
 
 #define SCREEN_WIDTH 1000
 #define SCREEN_HEIGHT 1000
@@ -17,7 +19,7 @@ class camera {
 private:
     glm::vec4 eye1;
     glm::vec4 eye2;
-
+    Scene scene;
 
     glm::vec4 pixelplane[4];
     glm::vec4 planeWidthAxis;
@@ -29,6 +31,8 @@ private:
 
     //Finds highest pixel intensity
     double findimax();
+    //Shoot rays from camera
+    void generateRays();
 
 public:
     camera();
@@ -39,6 +43,10 @@ public:
     void render();
     //Creates image from pixel matrix
     void createImage();
+
+    void createScene();
+
+    void createTexture(unsigned char texdata[]);
 
 };
 

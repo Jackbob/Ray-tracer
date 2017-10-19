@@ -13,8 +13,9 @@ class pixel {
 public:
     pixel() = default;
     ~pixel() = default;
+
     glm::dvec3 pixelColor;
-    ray* pixelRay;
+    ray pixelRay;
 
     double getIntensity();
 };

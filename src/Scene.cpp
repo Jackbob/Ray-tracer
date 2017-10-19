@@ -5,14 +5,21 @@
 #include "Scene.h"
 
 
-void Scene::intersectedTriangle(ray rayarg) {
+glm::dvec3 Scene::intersectedTriangle(ray rayarg) {
 
-    {
-        for(auto i:triangles)
-        {
-            i.rayIntersection(rayarg);
+    glm::vec4* intersectpoint = nullptr;
+    glm::dvec3 color = glm::dvec3(0.0, 0.0, 0.0);
+    float length = FLT_MAX;
+        for(auto &i:triangles) {
+            intersectpoint = new glm::vec4(i.rayIntersection(rayarg));
+            if(intersectpoint->w != -1.0f) {
+                if((rayarg.startPoint - *intersectpoint).length() < length){
+                    length = (rayarg.startPoint - *intersectpoint).length();
+                    color = i.getColor();
+                }
+            }
         }
-    }
+    return color;
 }
 
 void Scene::createRoom() {

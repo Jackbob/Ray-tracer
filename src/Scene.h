@@ -9,6 +9,7 @@
 #include <vector>
 #include "Triangle.h"
 #include "ray.h"
+#include "glm/glm.hpp"
 
 class Scene {
 
@@ -20,11 +21,9 @@ public:
     Scene() = default;
     ~Scene()  = default;
 
-    void intersectedTriangle(ray rayarg);
+    glm::dvec3 intersectedTriangle(ray rayarg);
 
     void createRoom();
-
-
 
 };
 

@@ -15,8 +15,10 @@
 #define SCREEN_HEIGHT 1000
 
 void initOpenGL(GLFWwindow*& window);
-GLuint drawQuad();
+void drawQuad();
+void drawQuad2();
 GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path);
+
 
 
 #endif //RAY_TRACER_OPENGLFUNC_H

@@ -8,39 +8,39 @@
 #include <fstream>
 #include "openglfunc.h"
 
-GLFWwindow* window;
-
 int main() {
 
-
-    ray r(glm::vec4(0.2f,0.2f,1.0f,1.0f), glm::vec4(0.2f,0.2f,0.0f, 1.0f), glm::dvec3(1.0,1.0,1.0));
-    Triangle tri(glm::vec4(0.0f,0.0f,0.0f,1.0f), glm::vec4(1.0f,0.0f,0.0f,1.0f), glm::vec4(0.0f,1.0f,0.0f,1.0f), glm::dvec3(1.0,0.0,0.0) );
-
-    glm::vec4 p = tri.rayIntersection(r);
-
-    if(p.w != -1.0f)
-        std::cout << p.x << " " << p.y << " " << p.z << std::endl;
-    else
-        std::cout << "No intersection" << std::endl;
-
+    GLFWwindow* window;
 
     camera cam;
+    cam.createScene();
+    cam.render();
+    cam.createImage();
+    unsigned char texdata[SCREEN_HEIGHT * SCREEN_WIDTH * 3];
+    std::fill_n(texdata, SCREEN_HEIGHT * SCREEN_WIDTH * 3, 255);
+    cam.createTexture(texdata);
 
-    glm::vec4 pixelPos = cam.getPixelPos(1000, 1000);
-
-    std::cout << pixelPos.x << " " << pixelPos.y << " " << pixelPos.z << std::endl;
-
-    /*
     initOpenGL(window);
+
+    GLuint t = 0;
+
+    glGenTextures( 1, &t );
+    glBindTexture(GL_TEXTURE_2D, t);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, texdata );
+
+
+    GLuint programID = LoadShaders("vertex.glsl", "fragment.glsl");
+    glUseProgram(programID);
     // Create and compile our GLSL program from the shaders
-    GLuint programID = LoadShaders( "vertex.glsl", "fragment.glsl" );
 
 
     do{
-        // Draw nothing, see you in tutorial 2 !
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glUseProgram(programID);
+
         drawQuad();
 
         // Swap buffers
@@ -50,7 +50,7 @@ int main() {
     } // Check if the ESC key was pressed or the window was closed
     while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
            glfwWindowShouldClose(window) == 0 );
-    */
+
 
 
     return 0;
