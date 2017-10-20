@@ -46,7 +46,7 @@ public:
 
     void createScene();
 
-    void createTexture(unsigned char texdata[]);
+    void createTexture(uint8_t texdata[]);
 
 };
 

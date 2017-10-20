@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
+#include "Objects.h"
 #include <fstream>
 #include "openglfunc.h"
 
@@ -16,32 +17,48 @@ int main() {
     cam.createScene();
     cam.render();
     cam.createImage();
-    unsigned char texdata[SCREEN_HEIGHT * SCREEN_WIDTH * 3];
-    std::fill_n(texdata, SCREEN_HEIGHT * SCREEN_WIDTH * 3, 255);
+
+    auto* texdata = new uint8_t[SCREEN_HEIGHT * SCREEN_WIDTH * 3];
+
     cam.createTexture(texdata);
 
     initOpenGL(window);
 
+    GLuint programID = LoadShaders("vertex.glsl", "fragment.glsl");
+
     GLuint t = 0;
 
+    glEnable(GL_TEXTURE_2D); // Required for glBuildMipmap() to work (!)
     glGenTextures( 1, &t );
     glBindTexture(GL_TEXTURE_2D, t);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, texdata );
+
+    // Set parameters to determine how the texture is resized
+    glTexParameteri ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_LINEAR_MIPMAP_LINEAR );
+    glTexParameteri ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_LINEAR );
+    // Set parameters to determine how the texture wraps at edges
+    glTexParameteri ( GL_TEXTURE_2D , GL_TEXTURE_WRAP_S , GL_REPEAT );
+    glTexParameteri ( GL_TEXTURE_2D , GL_TEXTURE_WRAP_T , GL_REPEAT );
+    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+    // Read the texture data from file and upload it to the GPU
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCREEN_WIDTH, SCREEN_HEIGHT, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, texdata);
+    glGenerateMipmap(GL_TEXTURE_2D);
 
 
-    GLuint programID = LoadShaders("vertex.glsl", "fragment.glsl");
     glUseProgram(programID);
     // Create and compile our GLSL program from the shaders
 
+
+    Objects screenquad;
+    screenquad.createQuad();
 
     do{
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-        drawQuad();
+        //drawQuad();
+        screenquad.render();
 
         // Swap buffers
         glfwSwapBuffers(window);

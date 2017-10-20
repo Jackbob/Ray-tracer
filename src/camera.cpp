@@ -39,7 +39,7 @@ void camera::render() {
 void camera::createImage() {
 
     double imax = findimax();
-    double truncValue = 259.99/imax;
+    double truncValue = 254.99/imax;
 
     for(int h = 0;h<SCREEN_WIDTH;h++) {
         for(int w = 0;w<SCREEN_WIDTH;w++) {
@@ -87,17 +87,15 @@ void camera::createScene() {
     scene.createRoom();
 }
 
-void camera::createTexture(unsigned char texdata[]) {
-    int row = SCREEN_HEIGHT-1;
-    for(int i=0; row < 0; i+=3){
-        if(i > 1000) {
-            row--;
-            i = 0;
-        }
-        else{
-            texdata[i] = static_cast<unsigned char>(pixels[row][i].pixelColor.x / 255);
-            texdata[i+1] = static_cast<unsigned char>(pixels[row][i].pixelColor.y / 255);
-            texdata[i+2] = static_cast<unsigned char>(pixels[row][i].pixelColor.z / 255);
+void camera::createTexture(uint8_t texdata[]) {
+    unsigned int location;
+    for(int w=0;  w < SCREEN_WIDTH; w++){
+        for(int h=0;h<SCREEN_HEIGHT;h++) {
+            location = static_cast<unsigned int>((h*SCREEN_WIDTH+w));
+
+            texdata[location + 0] = static_cast<uint8_t>(pixels[h][w].pixelColor.x);
+            texdata[location + 1] = static_cast<uint8_t>(pixels[h][w].pixelColor.y);
+            texdata[location + 2] = static_cast<uint8_t>(pixels[h][w].pixelColor.z);
         }
     }
 }
