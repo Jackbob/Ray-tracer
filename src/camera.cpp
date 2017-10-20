@@ -91,11 +91,11 @@ void camera::createTexture(uint8_t texdata[]) {
     unsigned int location;
     for(int w=0;  w < SCREEN_WIDTH; w++){
         for(int h=0;h<SCREEN_HEIGHT;h++) {
-            location = static_cast<unsigned int>((h*SCREEN_WIDTH+w));
+            location = static_cast<unsigned int>((h*SCREEN_HEIGHT+w)*3);
 
-            texdata[location + 0] = static_cast<uint8_t>(pixels[h][w].pixelColor.x);
-            texdata[location + 1] = static_cast<uint8_t>(pixels[h][w].pixelColor.y);
-            texdata[location + 2] = static_cast<uint8_t>(pixels[h][w].pixelColor.z);
+            texdata[location + 0] = static_cast<uint8_t>(pixels[SCREEN_HEIGHT-h-1][w].pixelColor.x);
+            texdata[location + 1] = static_cast<uint8_t>(pixels[SCREEN_HEIGHT-h-1][w].pixelColor.y);
+            texdata[location + 2] = static_cast<uint8_t>(pixels[SCREEN_HEIGHT-h-1][w].pixelColor.z);
         }
     }
 }
