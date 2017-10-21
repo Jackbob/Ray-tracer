@@ -21,8 +21,8 @@ camera::camera() {
     planeWidthAxis = glm::normalize(planeWidthAxis);
     planeHeigthAxis = glm::normalize(planeHeigthAxis);
 
-    eye1 = glm::vec4(0.0, 0.0, 1.0, 1.0);
-    eye2 = glm::vec4(0.0, 0.0, 2.0, 1.0);
+    eye1 = glm::vec4(-1.0, 0.0, 0.0, 1.0);
+    eye2 = glm::vec4(-2.0, 0.0, 0.0, 1.0);
 }
 
 void camera::render() {
