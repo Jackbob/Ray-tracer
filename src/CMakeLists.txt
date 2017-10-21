@@ -7,7 +7,7 @@ if (UNIX AND NOT APPLE)
     set(GLM_SOURCE_DIR "${CMAKE_SOURCE_DIR}/external/glm")
         find_package(PkgConfig REQUIRED)
         pkg_search_module(GLFW REQUIRED glfw3)
-        pkg_search_module(GLEW REQUIRED)
+        pkg_search_module(GLEW REQUIRED glew)
 
         include_directories(
                 ${GLM_SOURCE_DIR}

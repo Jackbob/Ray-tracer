@@ -1,12 +1,7 @@
 #include <iostream>
-#include "Triangle.h"
-#include "ray.h"
 #include "camera.h"
-#include <glm/glm.hpp>
-#include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "Objects.h"
-#include <fstream>
 #include "openglfunc.h"
 
 int main() {
@@ -21,16 +16,6 @@ int main() {
     auto* texdata = new uint8_t[SCREEN_HEIGHT * SCREEN_WIDTH * 3];
 
     cam.createTexture(texdata);
-    unsigned int location;
-    for(int w=900;  w < 1000; w++){
-        for(int h=0;h<100;h++) {
-            location = static_cast<unsigned int>((h*SCREEN_HEIGHT+w)*3);
-
-            //texdata[location + 0] = 255;
-            //texdata[location + 1] = 0;
-            //texdata[location + 2] = 0;
-        }
-    }
 
     initOpenGL(window);
 
