@@ -27,13 +27,29 @@ camera::camera() {
 
 void camera::render() {
 
-    generateRays();
-    for(auto &pixelrow : pixels) {
-        for(auto &p : pixelrow) {
+    generateRays(0, SCREEN_HEIGHT);
+    std::vector<std::thread*> threads;
+    unsigned concurentThreadsSupported = std::thread::hardware_concurrency();
+    if(concurentThreadsSupported == 0)
+        concurentThreadsSupported = 1;
+    unsigned int rowsPerThread = SCREEN_HEIGHT/concurentThreadsSupported;
+    for(int i=0; i<concurentThreadsSupported;i++){
+        unsigned int fromRow = i*rowsPerThread;
+        unsigned int toRow = fromRow + rowsPerThread;
+        if(toRow > SCREEN_HEIGHT)
+            toRow = SCREEN_HEIGHT;
+        threads.emplace_back( new std::thread(&camera::rayRendering, this, fromRow, toRow));
+    }
+    for(auto t : threads)
+        t->join();
+}
+
+void camera::rayRendering(unsigned int fromRow, unsigned int toRow) {
+    for(int r=fromRow; r<toRow; r++) {
+        for(auto &p : pixels[r]) {
             p.pixelColor = scene.intersectedTriangle(p.pixelRay);
         }
     }
-
 }
 
 void camera::createImage() {
@@ -75,8 +91,8 @@ glm::vec4 camera::getPixelPos(int h, int w) {
 
 }
 
-void camera::generateRays() {
-    for(int h=0; h<SCREEN_HEIGHT; h++) {
+void camera::generateRays(unsigned int fromRow, unsigned int toRow) {
+    for(int h=fromRow; h<toRow; h++) {
         for(int w=0; w<SCREEN_WIDTH; w++) {
             pixels[h][w].pixelRay = ray(eye1, getPixelPos(h+1,w+1), glm::dvec3(1.0,1.0,1.0));
         }

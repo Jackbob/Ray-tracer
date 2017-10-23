@@ -8,6 +8,11 @@ if (UNIX AND NOT APPLE)
         find_package(PkgConfig REQUIRED)
         pkg_search_module(GLFW REQUIRED glfw3)
         pkg_search_module(GLEW REQUIRED glew)
+        find_package(Threads REQUIRED)
+
+    if(THREADS_HAVE_PTHREAD_ARG)
+        target_compile_options(${APP_NAME} PUBLIC "-pthread")
+    endif()
 
         include_directories(
                 ${GLM_SOURCE_DIR}
@@ -21,7 +26,7 @@ if (UNIX AND NOT APPLE)
 
     add_executable(${APP_NAME} ${SOURCE_FILES})
 
-    target_link_libraries(${APP_NAME} ${GLEW_LIBRARIES} ${GLFW_LIBRARIES} ${GLFW_STATIC_LIBRARIES})
+    target_link_libraries(${APP_NAME} ${GLEW_LIBRARIES} ${GLFW_LIBRARIES} ${GLFW_STATIC_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
     else()
 
@@ -42,6 +47,11 @@ if (UNIX AND NOT APPLE)
     find_package(OpenGL REQUIRED)
     find_package(glfw3 CONFIG REQUIRED)
     find_package(GLEW REQUIRED)
+    find_package(Threads REQUIRED)
+
+    if(THREADS_HAVE_PTHREAD_ARG)
+        target_compile_options(${APP_NAME} PUBLIC "-pthread")
+    endif()
 
     if(GLEW_FOUND)
         include_directories(${GLEW_INCLUDE_DIRS})
@@ -59,7 +69,7 @@ add_definitions(-DGLEW_STATIC)
 
     #target_link_libraries(${APP_NAME} ${GLFW_LIBRARIES} ${GLFW_STATIC_LIBRARIES} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} glew GLEW)
     target_link_libraries(${APP_NAME} glfw ${GLFW_LIBRARIES})
-    target_link_libraries(${APP_NAME} glfw ${OPENGL_glu_LIBRARY} ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES})
+    target_link_libraries(${APP_NAME} glfw ${OPENGL_glu_LIBRARY} ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES}  ${CMAKE_THREAD_LIBS_INIT})
 
 
 endif (UNIX AND NOT APPLE)

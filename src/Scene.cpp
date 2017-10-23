@@ -19,6 +19,7 @@ glm::dvec3 Scene::intersectedTriangle(ray rayarg) {
                 }
             }
         }
+
     return color;
 }
 

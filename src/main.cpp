@@ -3,9 +3,11 @@
 #include "GLFW/glfw3.h"
 #include "Objects.h"
 #include "openglfunc.h"
+#include <chrono>
 
 int main() {
 
+    std::chrono::high_resolution_clock::time_point starttime = std::chrono::high_resolution_clock::now();
     GLFWwindow* window;
 
     camera cam;
@@ -47,6 +49,10 @@ int main() {
     Objects screenquad;
     screenquad.createQuad();
 
+    std::chrono::high_resolution_clock::time_point endtime = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> time_span = endtime - starttime;
+    std::cout << "Render time: " << time_span.count() << " ms" << std::endl;
+
     do{
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -62,7 +68,6 @@ int main() {
     } // Check if the ESC key was pressed or the window was closed
     while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
            glfwWindowShouldClose(window) == 0 );
-
 
 
     return 0;

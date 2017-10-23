@@ -11,6 +11,8 @@
 #include <iostream>
 #include <GL/glew.h>
 #include "Scene.h"
+#include <thread>
+#include <pthread.h>
 
 #define SCREEN_WIDTH 1000
 #define SCREEN_HEIGHT 1000
@@ -32,7 +34,9 @@ private:
     //Finds highest pixel intensity
     double findimax();
     //Shoot rays from camera
-    void generateRays();
+    void generateRays(unsigned int fromRow, unsigned int toRow);
+
+    void rayRendering(unsigned int fromRow, unsigned int toRow);
 
 public:
     camera();
@@ -47,6 +51,7 @@ public:
     void createScene();
 
     void createTexture(uint8_t texdata[]);
+
 
 };
 
