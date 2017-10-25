@@ -11,8 +11,14 @@
 #include <iostream>
 #include <GL/glew.h>
 #include "Scene.h"
-#include <mingw.thread.h>
 #include <pthread.h>
+#ifdef _WIN32
+    #include <mingw.thread.h>
+#endif
+
+#ifdef linux
+    #include <thread>
+#endif
 
 #define SCREEN_WIDTH 1000
 #define SCREEN_HEIGHT 1000
