@@ -11,7 +11,7 @@
 #include <iostream>
 #include <GL/glew.h>
 #include "Scene.h"
-#include <thread>
+#include <mingw.thread.h>
 #include <pthread.h>
 
 #define SCREEN_WIDTH 1000
