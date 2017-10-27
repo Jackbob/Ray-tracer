@@ -6,6 +6,7 @@
 #define RAY_TRACER_RAY_H
 
 #include <glm/glm.hpp>
+#include <algorithm>
 
 
 class ray {
@@ -21,6 +22,8 @@ public:
     ray(glm::vec4 start, glm::vec4 end, glm::dvec3 color);
 
     ~ray() = default;
+
+    double getIntensity();
 
 };
 

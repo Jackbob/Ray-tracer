@@ -12,6 +12,8 @@
 #include <GL/glew.h>
 #include "Scene.h"
 #include <pthread.h>
+#include "constants.h"
+
 #ifdef _WIN32
     #include <mingw.thread.h>
 #endif
@@ -20,8 +22,6 @@
     #include <thread>
 #endif
 
-#define SCREEN_WIDTH 1000
-#define SCREEN_HEIGHT 1000
 
 class camera {
 private:
@@ -34,6 +34,9 @@ private:
     glm::vec4 planeHeigthAxis;
     float pixelStep;
 
+    unsigned int concurentThreadsSupported;
+    double renderprocent;
+
     std::vector<std::vector<pixel>> pixels;
 
 
@@ -42,21 +45,28 @@ private:
     //Shoot rays from camera
     void generateRays(unsigned int fromRow, unsigned int toRow);
 
+    //Render pixels that are in row
     void rayRendering(unsigned int fromRow, unsigned int toRow);
 
+    //Normalize all pixels between 0-255
+    void truncPixelValues(unsigned int fromRow, unsigned int toRow, double truncValue);
+
+    //Creates texture to show on screen
+    void createTexture();
+
 public:
+    uint8_t* texdata;
+
     camera();
     ~camera() = default;
 
-    glm::vec4 getPixelPos(int h, int w);
+    glm::vec4 getPixelPos(int h, int w, std::uniform_real_distribution<> dis, std::random_device &rd);
     //Renders scene connected to camera
     void render();
     //Creates image from pixel matrix
     void createImage();
 
     void createScene();
-
-    void createTexture(uint8_t texdata[]);
 
 
 };

@@ -7,7 +7,12 @@
 
 #include <glm/glm.hpp>
 #include "ray.h"
+#include "constants.h"
 
+
+struct BRDF {
+    int BRDF_type;
+};
 
 class Triangle {
 
@@ -17,12 +22,14 @@ private:
     glm::vec4 vertex1, vertex2, vertex3;
 
 public:
+    BRDF BRDF_func;
 
     //Constructor
     Triangle() = default;
     Triangle(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3, glm::dvec3 c);
 
-    glm::vec3 getNormal(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3);
+    glm::vec3 calculateNormal(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3);
+    glm::vec3 getNormal(){return normal;}
 
     //Destructor
     ~Triangle() = default;

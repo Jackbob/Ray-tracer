@@ -10,9 +10,7 @@
 #include "GLFW/glfw3.h"
 #include <fstream>
 #include <vector>
-
-#define SCREEN_WIDTH 1000
-#define SCREEN_HEIGHT 1000
+#include "constants.h"
 
 void initOpenGL(GLFWwindow*& window);
 void drawQuad();

@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include "ray.h"
 #include <algorithm>
+#include "constants.h"
 
 class pixel {
 public:
@@ -15,7 +16,7 @@ public:
     ~pixel() = default;
 
     glm::dvec3 pixelColor;
-    ray pixelRay;
+    ray pixelRay[ANTIALIASING];
 
     double getIntensity();
 };

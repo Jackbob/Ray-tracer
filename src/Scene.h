@@ -10,11 +10,24 @@
 #include "Triangle.h"
 #include "ray.h"
 #include "glm/glm.hpp"
+#include "constants.h"
+#include <random>
+#include "glm/gtx/vector_angle.hpp"
+#include "glm/gtx/fast_trigonometry.hpp"
+
+struct lightsource {
+public:
+    float width;
+    float height;
+    glm::vec4 position;
+    glm::dvec3 lightcolor;
+};
 
 class Scene {
 
 private:
     std::vector<Triangle> triangles;
+    lightsource light;
 
 public:
 

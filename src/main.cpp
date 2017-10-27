@@ -15,16 +15,10 @@ int main() {
     cam.render();
     cam.createImage();
 
-    auto* texdata = new uint8_t[SCREEN_HEIGHT * SCREEN_WIDTH * 3];
-
-    cam.createTexture(texdata);
-
     initOpenGL(window);
-
     GLuint programID = LoadShaders("vertex.glsl", "fragment.glsl");
 
     GLuint t = 0;
-
     glEnable(GL_TEXTURE_2D); // Required for glBuildMipmap() to work (!)
     glGenTextures( 1, &t );
     glBindTexture(GL_TEXTURE_2D, t);
@@ -38,7 +32,7 @@ int main() {
     glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
     // Read the texture data from file and upload it to the GPU
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCREEN_WIDTH, SCREEN_HEIGHT, 0,
-                 GL_RGB, GL_UNSIGNED_BYTE, texdata);
+                 GL_RGB, GL_UNSIGNED_BYTE, cam.texdata);
     glGenerateMipmap(GL_TEXTURE_2D);
 
 
