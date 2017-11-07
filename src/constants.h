@@ -10,8 +10,8 @@
 #define SCREEN_WIDTH 500
 #define SCREEN_HEIGHT 500
 #define ANTIALIASING 8
-#define ABSORPTION_CHANCE 0.2
-#define IMPORTANCE 0.8
+#define ABSORPTION_CHANCE 0.1
+#define IMPORTANCE 0.5
 
 const int pixelAmount = SCREEN_HEIGHT * SCREEN_WIDTH;
 

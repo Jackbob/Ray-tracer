@@ -45,7 +45,8 @@ int main() {
 
     std::chrono::high_resolution_clock::time_point endtime = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> time_span = endtime - starttime;
-    std::cout << "Render time: " << time_span.count() << " ms" << std::endl;
+    std::cout << "Render time: " << time_span.count() << " ms,   ";
+    std::cout << (int)(time_span.count() / (1000 * 60)) << "m " << ((int)time_span.count() / 1000)%60 << "s" << std::endl;
 
     do{
 

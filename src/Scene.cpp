@@ -48,16 +48,7 @@ glm::dvec3 Scene::intersectedTriangle(ray rayarg) {
                 break;
         }
     }
-        /*
-            glm::vec3 rayDir = glm::vec3(rayarg.endPoint - rayarg.startPoint);
-            glm::vec4 reflDir = glm::vec4(glm::reflect(rayDir, tri->getNormal()), 1.0f);
-            ray reflRay = ray(*intersectpoint, *intersectpoint + reflDir, glm::dvec3(0.0));
-            color += intersectedTriangle(reflRay);
-        }
-        else
-         */
-
-        return tri->getColor();
+    return tri->getColor();
 }
 
 void Scene::createRoom() {
@@ -94,8 +85,8 @@ void Scene::createRoom() {
     triangles.emplace_back(Triangle(glm::vec4(10,6,5,1), glm::vec4(13,0,-5,1), glm::vec4(13,0,5,1), glm::dvec3(0.0,0.0,1.0)));
     triangles.emplace_back(Triangle(glm::vec4(10,6,5,1), glm::vec4(10,6,-5,1), glm::vec4(13,0,-5,1), glm::dvec3(0.0,0.0,1.0)));
 
-    triangles.emplace_back(Triangle(glm::vec4(13,0,5,1), glm::vec4(13,0,-5,1), glm::vec4(10,-6,-5,1), glm::dvec3(0.5,1.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(13,0,5,1), glm::vec4(10,-6,-5,1), glm::vec4(10,-6,5,1), glm::dvec3(0.5,1.0,1.0)));
+    triangles.emplace_back(Triangle(glm::vec4(13,0,5,1), glm::vec4(13,0,-5,1), glm::vec4(10,-6,-5,1), glm::dvec3(1.0,0.0,0.0)));
+    triangles.emplace_back(Triangle(glm::vec4(13,0,5,1), glm::vec4(10,-6,-5,1), glm::vec4(10,-6,5,1), glm::dvec3(1.0,0.0,0.0)));
 
     light.width = 1;
     light.height = 1;
