@@ -54,13 +54,15 @@ void camera::rayRendering(unsigned int fromRow, unsigned int toRow) {
     for(int r=fromRow; r<toRow; r++) {
         for(auto &p : pixels[r]) {
             for (auto &ray : p.pixelRay)
-                ray.rayColor = scene.intersectedTriangle(ray);
+                ray.rayColor = createRayPath(ray);
         }
         if(r % (SCREEN_HEIGHT / 100) == 0)
             renderprocent++;
         std::cout << "Render: " << renderprocent << "%" << std::endl;
     }
 }
+
+
 
 //Public function for creating the texture to use
 void camera::createImage() {
@@ -151,5 +153,62 @@ void camera::createTexture() {
             texdata[location + 1] = static_cast<uint8_t>(pixels[SCREEN_HEIGHT-h-1][w].pixelColor.y);
             texdata[location + 2] = static_cast<uint8_t>(pixels[SCREEN_HEIGHT-h-1][w].pixelColor.z);
         }
+    }
+}
+
+glm::dvec3 camera::createRayPath(ray rayarg) {
+
+
+    glm::vec4 intersectpoint = glm::vec4(0.0,0.0,0.0,-1.0f);
+    float intersectdistance;
+    Triangle tri;
+    if (!scene.intersectedTriangle(rayarg, intersectdistance, intersectpoint, tri))
+        return glm::dvec3(0.0);
+    //scene.intersectedTriangle(rayarg, intersectdistance, intersectpoint, tri);
+
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_real_distribution<> dis(0.0, 1.0);
+    if (dis(gen) > ABSORPTION_CHANCE) {
+        switch (tri.BRDF_func.BRDF_type) {
+            case LAMBERTIAN: {
+                std::uniform_real_distribution<> disAngle(0.0, M_PI);
+                glm::vec3 normal = tri.getNormal();
+                double incOffset = abs(glm::orientedAngle(glm::normalize(glm::vec2(normal.x, normal.z)),
+                                                          glm::vec2(0.0, 1.0)));
+                double asiOffset = glm::orientedAngle(glm::normalize(glm::vec2(normal.x, normal.y)),
+                                                      glm::vec2(0.0, 1.0));
+                double randAsi = 2.0 * disAngle(rd);
+                double randInc = disAngle(rd);
+                glm::vec4 reflDir = glm::vec4(glm::fastCos(randAsi + asiOffset),
+                                              glm::fastSin(randAsi + asiOffset),
+                                              glm::fastCos(randInc + incOffset), 1.0);
+
+                ray reflRay = ray(intersectpoint, intersectpoint + reflDir, glm::dvec3(0.0));
+                glm::dvec3 color;
+                color = createRayPath(reflRay);
+                color *= IMPORTANCE;
+
+                /*
+                for(int i=0; i<N_SHADOWRAYS;i++) {
+                    ray shadowray = scene.sampleShadowray(intersectpoint);
+                    float lightdistance = glm::length(shadowray.endPoint - shadowray.startPoint);
+                    if(!scene.intersectedTriangle(shadowray, intersectdistance, intersectpoint, tri)){
+                        if(intersectdistance < lightdistance){
+                            color += tri.getColor() *
+                        }
+                    }
+
+                }
+                 */
+
+                color += tri.getColor();
+
+                return color;
+            }
+            default:
+                break;
+        }
+        return glm::dvec3(0.0);
     }
 }

@@ -11,9 +11,10 @@ vertex1{v1}, vertex2{v2}, vertex3{v3}, color{c}, normal{calculateNormal(v1,v2,v3
     BRDF_func.BRDF_type = LAMBERTIAN;
 }
 
-glm::vec4 Triangle::rayIntersection(ray rayarg)
+glm::vec4 Triangle::rayIntersection(ray rayarg, float &t)
 {
     glm::vec3 raydir = glm::normalize(glm::vec3(rayarg.endPoint - rayarg.startPoint));
+    t = FLT_MAX;
 
     glm::vec3 v1v2 = vertex2 - vertex1;
     glm::vec3 v1v3 = vertex3 - vertex1;
@@ -39,7 +40,7 @@ glm::vec4 Triangle::rayIntersection(ray rayarg)
     if (v < 0 || u + v > 1)
         return glm::vec4(0.0f, 0.0f, 0.0f, -1.0f);
 
-    float t = glm::dot(v1v3, qvec) * invDet;
+    t = glm::dot(v1v3, qvec) * invDet;
 
     return rayarg.startPoint + glm::vec4(raydir * t, 1.0f);
 }

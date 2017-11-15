@@ -18,9 +18,10 @@
 struct lightsource {
 public:
     float width;
-    float height;
+    float breadth;
     glm::vec4 position;
     glm::dvec3 lightcolor;
+    glm::vec3 orientation;
 };
 
 class Scene {
@@ -30,11 +31,12 @@ private:
     lightsource light;
 
 public:
+    ray sampleShadowray(glm::vec4 fromPoint);
 
     Scene() = default;
     ~Scene()  = default;
 
-    glm::dvec3 intersectedTriangle(ray rayarg);
+    bool intersectedTriangle(ray rayarg, float &t, glm::vec4 &intersectpoint, Triangle &tri);
 
     void createRoom();
 
