@@ -76,6 +76,6 @@ void Scene::createRoom() {
 
     light.width = 1;
     light.breadth = 1;
-    light.lightcolor = glm::dvec3(1.0);
+    light.lightcolor = glm::dvec3(1.0,0.94,0.88);
     light.position = glm::vec4(5.0, 0.0, 4.9, 1.0);
 }

@@ -24,7 +24,7 @@ public:
     ~ray() = default;
 
     double getIntensity();
-
+    glm::vec4 getDirection();
 };
 
 

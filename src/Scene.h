@@ -28,9 +28,10 @@ class Scene {
 
 private:
     std::vector<Triangle> triangles;
-    lightsource light;
 
 public:
+    lightsource light;
+
     ray sampleShadowray(glm::vec4 fromPoint);
 
     Scene() = default;

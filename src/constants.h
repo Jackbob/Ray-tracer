@@ -7,16 +7,16 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 
-#define SCREEN_WIDTH 500
-#define SCREEN_HEIGHT 500
+#define SCREEN_WIDTH 300
+#define SCREEN_HEIGHT 300
 //Rays per pixel
-#define ANTIALIASING 4
+#define ANTIALIASING 3
 //Chance of rays being absorbed by surface
-#define ABSORPTION_CHANCE 0.2
+#define ABSORPTION_CHANCE 0.3
 //Fraction of importance from a ray reflection
-#define IMPORTANCE 0.5
+#define IMPORTANCE 0.4
 //Number of shadowrays per lightsource
-#define N_SHADOWRAYS 4
+#define N_SHADOWRAYS 1
 
 const int pixelAmount = SCREEN_HEIGHT * SCREEN_WIDTH;
 

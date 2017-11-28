@@ -164,7 +164,6 @@ glm::dvec3 camera::createRayPath(ray rayarg) {
     Triangle tri;
     if (!scene.intersectedTriangle(rayarg, intersectdistance, intersectpoint, tri))
         return glm::dvec3(0.0);
-    //scene.intersectedTriangle(rayarg, intersectdistance, intersectpoint, tri);
 
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
@@ -174,10 +173,10 @@ glm::dvec3 camera::createRayPath(ray rayarg) {
             case LAMBERTIAN: {
                 std::uniform_real_distribution<> disAngle(0.0, M_PI);
                 glm::vec3 normal = tri.getNormal();
-                double incOffset = abs(glm::orientedAngle(glm::normalize(glm::vec2(normal.x, normal.z)),
-                                                          glm::vec2(0.0, 1.0)));
+                double incOffset = glm::orientedAngle(glm::normalize(glm::vec2(normal.x, normal.z)),
+                                                          glm::normalize(glm::vec2(0.0, 1.0)));
                 double asiOffset = glm::orientedAngle(glm::normalize(glm::vec2(normal.x, normal.y)),
-                                                      glm::vec2(0.0, 1.0));
+                                                      glm::normalize(glm::vec2(0.0, 1.0)));
                 double randAsi = 2.0 * disAngle(rd);
                 double randInc = disAngle(rd);
                 glm::vec4 reflDir = glm::vec4(glm::fastCos(randAsi + asiOffset),
@@ -189,22 +188,31 @@ glm::dvec3 camera::createRayPath(ray rayarg) {
                 color = createRayPath(reflRay);
                 color *= IMPORTANCE;
 
-                /*
+                ray shadowray;
+                Triangle dummy;
                 for(int i=0; i<N_SHADOWRAYS;i++) {
-                    ray shadowray = scene.sampleShadowray(intersectpoint);
+                    shadowray = scene.sampleShadowray(intersectpoint);
                     float lightdistance = glm::length(shadowray.endPoint - shadowray.startPoint);
-                    if(!scene.intersectedTriangle(shadowray, intersectdistance, intersectpoint, tri)){
-                        if(intersectdistance < lightdistance){
-                            color += tri.getColor() *
+                    if(scene.intersectedTriangle(shadowray, intersectdistance, intersectpoint, dummy)){
+                        if(intersectdistance > lightdistance){
+                            double incAngle = abs(glm::angle(glm::normalize(tri.getNormal()),
+                                                             glm::normalize(glm::vec3(-rayarg.getDirection()))));
+                            double shadowAngle = abs(glm::angle(glm::normalize(tri.getNormal()),
+                                                                glm::normalize(glm::vec3(shadowray.getDirection()))));
+
+                            double lightfraction = glm::fastCos(shadowAngle)  * glm::fastCos(incAngle);
+
+                            color += glm::dvec3(tri.getColor().r * lightfraction * scene.light.lightcolor.r,
+                                                tri.getColor().g * lightfraction * scene.light.lightcolor.g,
+                                                tri.getColor().b * lightfraction * scene.light.lightcolor.b);
                         }
                     }
-
                 }
-                 */
-
-                color += tri.getColor();
 
                 return color;
+            }
+            case SPECULAR: {
+
             }
             default:
                 break;

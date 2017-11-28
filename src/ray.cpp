@@ -11,3 +11,7 @@ double ray::getIntensity() {
     return std::max(std::max(rayColor.x, rayColor.y), rayColor.z);
 }
 
+glm::vec4 ray::getDirection() {
+    return endPoint - startPoint;
+}
+
