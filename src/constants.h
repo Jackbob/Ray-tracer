@@ -9,9 +9,14 @@
 
 #define SCREEN_WIDTH 500
 #define SCREEN_HEIGHT 500
-#define ANTIALIASING 8
-#define ABSORPTION_CHANCE 0.1
+//Rays per pixel
+#define ANTIALIASING 4
+//Chance of rays being absorbed by surface
+#define ABSORPTION_CHANCE 0.2
+//Fraction of importance from a ray reflection
 #define IMPORTANCE 0.5
+//Number of shadowrays per lightsource
+#define N_SHADOWRAYS 4
 
 const int pixelAmount = SCREEN_HEIGHT * SCREEN_WIDTH;
 

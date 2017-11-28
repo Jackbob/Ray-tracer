@@ -48,6 +48,9 @@ int main() {
     std::cout << "Render time: " << time_span.count() << " ms,   ";
     std::cout << (int)(time_span.count() / (1000 * 60)) << "m " << ((int)time_span.count() / 1000)%60 << "s" << std::endl;
 
+    double asiOffset = glm::orientedAngle(glm::vec2(1.0,1.0), glm::vec2(0.0,1.0));
+    std::cout << asiOffset << std::endl;
+
     do{
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

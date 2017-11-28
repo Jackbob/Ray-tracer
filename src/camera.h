@@ -54,6 +54,8 @@ private:
     //Creates texture to show on screen
     void createTexture();
 
+    glm::dvec3 createRayPath(ray rayarg);
+
 public:
     uint8_t* texdata;
 
