@@ -23,7 +23,7 @@ if (UNIX AND NOT APPLE)
 
     set(CMAKE_CXX_STANDARD 14)
 
-    set(SOURCE_FILES main.cpp Objects.cpp Objects.h ray.cpp ray.h pixel.cpp pixel.h camera.cpp camera.h Scene.cpp Scene.h Triangle.cpp Triangle.h openglfunc.cpp openglfunc.h constants.h)
+    set(SOURCE_FILES main.cpp Objects.cpp Objects.h ray.cpp ray.h pixel.cpp pixel.h camera.cpp camera.h Scene.cpp Scene.h Triangle.cpp Triangle.h openglfunc.cpp openglfunc.h constants.h Sphere.cpp Sphere.h)
 
     add_executable(${APP_NAME} ${SOURCE_FILES})
 
@@ -58,7 +58,7 @@ add_definitions(-DGLEW_STATIC)
             ${THREADS_SOURCE_DIR})
 
 
-    set(SOURCE_FILES main.cpp Objects.cpp Objects.h ray.cpp ray.h pixel.cpp pixel.h camera.cpp camera.h Scene.cpp Scene.h Triangle.cpp Triangle.h openglfunc.cpp openglfunc.h constants.h)
+    set(SOURCE_FILES main.cpp Objects.cpp Objects.h ray.cpp ray.h pixel.cpp pixel.h camera.cpp camera.h Scene.cpp Scene.h Triangle.cpp Triangle.h openglfunc.cpp openglfunc.h constants.h Sphere.cpp Sphere.h)
 
     add_executable(${APP_NAME} ${SOURCE_FILES})
 
