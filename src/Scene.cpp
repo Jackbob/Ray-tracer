@@ -4,19 +4,19 @@
 
 #include "Scene.h"
 
-
-bool Scene::intersectedTriangle(ray rayarg, float &t, glm::vec4 &intersectpoint, Triangle &tri) {
+bool Scene::intersectedObject(ray rayarg, float &t, glm::vec4 &intersectpoint, BRDF &brdf, glm::vec3 &objNormal) {
 
     glm::vec4 testpoint;
     intersectpoint = glm::vec4(0.0,0.0,0.0,-1.0f);
     t = FLT_MAX;
     float length = FLT_MAX;
-        for(auto &i:triangles) {
-            testpoint = i.rayIntersection(rayarg, t);
+        for(auto i:objects) {
+            testpoint = i->rayIntersection(rayarg, t);
             if(testpoint.w != -1.0f) {
                 if(t < length){
                     length = t;
-                    tri = i;
+                    brdf = i->BRDF_func;
+                    objNormal = i->getNormal();
                     intersectpoint = testpoint;
                 }
             }
@@ -40,42 +40,68 @@ ray Scene::sampleShadowray(glm::vec4 fromPoint) {
 void Scene::createRoom() {
 
     //Floor
-    triangles.emplace_back(Triangle(glm::vec4(5,0,-5,1), glm::vec4(0,-6,-5,1), glm::vec4(10,-6,-5,1), glm::dvec3(1.0,1.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(5,0,-5,1), glm::vec4(-3,0,-5,1), glm::vec4(0,-6,-5,1), glm::dvec3(1.0,1.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(5,0,-5,1), glm::vec4(0,6,-5,1), glm::vec4(-3,0,-5,1), glm::dvec3(1.0,1.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(5,0,-5,1), glm::vec4(10,6,-5,1), glm::vec4(0,6,-5,1), glm::dvec3(1.0,1.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(5,0,-5,1), glm::vec4(13,0,-5,1), glm::vec4(10,6,-5,1), glm::dvec3(1.0,1.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(5,0,-5,1), glm::vec4(10,-6,-5,1), glm::vec4(13,0,-5,1), glm::dvec3(1.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(5,0,-5,1), glm::vec4(0,-6,-5,1), glm::vec4(10,-6,-5,1), glm::dvec3(1.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(5,0,-5,1), glm::vec4(-3,0,-5,1), glm::vec4(0,-6,-5,1), glm::dvec3(1.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(5,0,-5,1), glm::vec4(0,6,-5,1), glm::vec4(-3,0,-5,1), glm::dvec3(1.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(5,0,-5,1), glm::vec4(10,6,-5,1), glm::vec4(0,6,-5,1), glm::dvec3(1.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(5,0,-5,1), glm::vec4(13,0,-5,1), glm::vec4(10,6,-5,1), glm::dvec3(1.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(5,0,-5,1), glm::vec4(10,-6,-5,1), glm::vec4(13,0,-5,1), glm::dvec3(1.0,1.0,1.0)));
 
     //Roof
-    triangles.emplace_back(Triangle(glm::vec4(5,0,5,1), glm::vec4(13,0,5,1),glm::vec4(10,-6,5,1), glm::dvec3(1.0,1.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(5,0,5,1), glm::vec4(10,-6,5,1), glm::vec4(0,-6,5,1), glm::dvec3(1.0,1.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(5,0,5,1), glm::vec4(0,-6,5,1), glm::vec4(-3,0,5,1), glm::dvec3(1.0,1.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(5,0,5,1), glm::vec4(-3,0,5,1), glm::vec4(0,6,5,1), glm::dvec3(1.0,1.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(5,0,5,1), glm::vec4(0,6,5,1), glm::vec4(10,6,5,1), glm::dvec3(1.0,1.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(5,0,5,1), glm::vec4(10,6,5,1), glm::vec4(13,0,5,1), glm::dvec3(1.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(5,0,5,1), glm::vec4(13,0,5,1),glm::vec4(10,-6,5,1), glm::dvec3(1.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(5,0,5,1), glm::vec4(10,-6,5,1), glm::vec4(0,-6,5,1), glm::dvec3(1.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(5,0,5,1), glm::vec4(0,-6,5,1), glm::vec4(-3,0,5,1), glm::dvec3(1.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(5,0,5,1), glm::vec4(-3,0,5,1), glm::vec4(0,6,5,1), glm::dvec3(1.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(5,0,5,1), glm::vec4(0,6,5,1), glm::vec4(10,6,5,1), glm::dvec3(1.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(5,0,5,1), glm::vec4(10,6,5,1), glm::vec4(13,0,5,1), glm::dvec3(1.0,1.0,1.0)));
 
     //Walls
-    triangles.emplace_back(Triangle(glm::vec4(10,-6,5,1), glm::vec4(0,-6,-5,1), glm::vec4(0,-6,5,1), glm::dvec3(0.0,1.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(10,-6,5,1), glm::vec4(10,-6,-5,1), glm::vec4(0,-6,-5,1), glm::dvec3(0.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(10,-6,5,1), glm::vec4(0,-6,-5,1), glm::vec4(0,-6,5,1), glm::dvec3(0.0,1.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(10,-6,5,1), glm::vec4(10,-6,-5,1), glm::vec4(0,-6,-5,1), glm::dvec3(0.0,1.0,1.0)));
 
-    triangles.emplace_back(Triangle(glm::vec4(0,-6,5,1), glm::vec4(0,-6,-5,1), glm::vec4(-3,0,-5,1), glm::dvec3(1.0,0.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(0,-6,5,1), glm::vec4(-3,0,-5,1), glm::vec4(-3,0,5,1), glm::dvec3(1.0,0.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(0,-6,5,1), glm::vec4(0,-6,-5,1), glm::vec4(-3,0,-5,1), glm::dvec3(1.0,0.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(0,-6,5,1), glm::vec4(-3,0,-5,1), glm::vec4(-3,0,5,1), glm::dvec3(1.0,0.0,1.0)));
 
-    triangles.emplace_back(Triangle(glm::vec4(-3,0,5,1), glm::vec4(-3,0,-5,1), glm::vec4(0,6,-5,1), glm::dvec3(1.0,1.0,0.0)));
-    triangles.emplace_back(Triangle(glm::vec4(-3,0,5,1), glm::vec4(0,6,-5,1), glm::vec4(0,6,5,1), glm::dvec3(1.0,1.0,0.0)));
+    objects.emplace_back(new Triangle(glm::vec4(-3,0,5,1), glm::vec4(-3,0,-5,1), glm::vec4(0,6,-5,1), glm::dvec3(1.0,1.0,0.0)));
+    objects.emplace_back(new Triangle(glm::vec4(-3,0,5,1), glm::vec4(0,6,-5,1), glm::vec4(0,6,5,1), glm::dvec3(1.0,1.0,0.0)));
 
-    triangles.emplace_back(Triangle(glm::vec4(0,6,5,1), glm::vec4(0,6,-5,1), glm::vec4(10,6,5,1), glm::dvec3(1.0,0.0,0.0)));
-    triangles.emplace_back(Triangle(glm::vec4(10,6,5,1), glm::vec4(0,6,-5,1), glm::vec4(10,6,-5,1), glm::dvec3(1.0,0.0,0.0)));
+    objects.emplace_back(new Triangle(glm::vec4(0,6,5,1), glm::vec4(0,6,-5,1), glm::vec4(10,6,5,1), glm::dvec3(1.0,0.0,0.0)));
+    objects.emplace_back(new Triangle(glm::vec4(10,6,5,1), glm::vec4(0,6,-5,1), glm::vec4(10,6,-5,1), glm::dvec3(1.0,0.0,0.0)));
 
-    triangles.emplace_back(Triangle(glm::vec4(10,6,5,1), glm::vec4(13,0,-5,1), glm::vec4(13,0,5,1), glm::dvec3(0.0,0.0,1.0)));
-    triangles.emplace_back(Triangle(glm::vec4(10,6,5,1), glm::vec4(10,6,-5,1), glm::vec4(13,0,-5,1), glm::dvec3(0.0,0.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(10,6,5,1), glm::vec4(13,0,-5,1), glm::vec4(13,0,5,1), glm::dvec3(0.0,0.0,1.0)));
+    objects.emplace_back(new Triangle(glm::vec4(10,6,5,1), glm::vec4(10,6,-5,1), glm::vec4(13,0,-5,1), glm::dvec3(0.0,0.0,1.0)));
 
-    triangles.emplace_back(Triangle(glm::vec4(13,0,5,1), glm::vec4(13,0,-5,1), glm::vec4(10,-6,-5,1), glm::dvec3(0.0,1.0,0.0)));
-    triangles.emplace_back(Triangle(glm::vec4(13,0,5,1), glm::vec4(10,-6,-5,1), glm::vec4(10,-6,5,1), glm::dvec3(0.0,1.0,0.0)));
+    objects.emplace_back(new Triangle(glm::vec4(13,0,5,1), glm::vec4(13,0,-5,1), glm::vec4(10,-6,-5,1), glm::dvec3(0.0,1.0,0.0)));
+    objects.emplace_back(new Triangle(glm::vec4(13,0,5,1), glm::vec4(10,-6,-5,1), glm::vec4(10,-6,5,1), glm::dvec3(0.0,1.0,0.0)));
+
+    objects.emplace_back(new Sphere(glm::vec4(10, 0, 0, 1), 2, glm::dvec3(0.5, 0.5, 0.5)));
 
     light.width = 1;
     light.breadth = 1;
     light.lightcolor = glm::dvec3(1.0,0.94,0.88);
     light.position = glm::vec4(5.0, 0.0, 4.9, 1.0);
+
+
+
+
+
+
+
+
 }
+
+Scene::~Scene() {
+
+    for(auto it = objects.begin(); it != objects.end(); ++it)
+    {
+        delete *it;
+        it = objects.erase(it);
+    }
+    objects.clear();
+}
+
+
+
+
+
+

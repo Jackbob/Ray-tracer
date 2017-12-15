@@ -5,16 +5,18 @@
 #ifndef RAY_TRACER_TRIANGLE_H
 #define RAY_TRACER_TRIANGLE_H
 
+#include "SceneObject.h"
 #include <glm/glm.hpp>
-#include "ray.h"
 #include "constants.h"
 
+class SceneObject;
 
-struct BRDF {
+/*struct BRDF {
     int BRDF_type;
-};
+};*/
 
-class Triangle {
+//template<class obj>
+class Triangle: public virtual SceneObject {
 
 private:
     glm::dvec3 color;
@@ -22,14 +24,13 @@ private:
     glm::vec4 vertex1, vertex2, vertex3;
 
 public:
-    BRDF BRDF_func;
 
     //Constructor
     Triangle() = default;
     Triangle(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3, glm::dvec3 c);
 
     glm::vec3 calculateNormal(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3);
-    glm::vec3 getNormal(){return normal;}
+    glm::vec3 getNormal() override {return normal;}
 
     //Destructor
     ~Triangle() = default;

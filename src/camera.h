@@ -13,6 +13,7 @@
 #include "Scene.h"
 #include <pthread.h>
 #include "constants.h"
+#include "SceneObject.h"
 
 #ifdef _WIN32
     #include <mingw.thread.h>

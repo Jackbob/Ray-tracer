@@ -161,21 +161,22 @@ glm::dvec3 camera::createRayPath(ray rayarg) {
 
     glm::vec4 intersectpoint = glm::vec4(0.0,0.0,0.0,-1.0f);
     float intersectdistance;
-    Triangle tri;
-    if (!scene.intersectedTriangle(rayarg, intersectdistance, intersectpoint, tri))
+    BRDF brdf;
+    glm::vec3 objNormal{};
+    if (!scene.intersectedObject(rayarg, intersectdistance, intersectpoint, brdf, objNormal))
         return glm::dvec3(0.0);
 
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<> dis(0.0, 1.0);
     if (dis(gen) > ABSORPTION_CHANCE) {
-        switch (tri.BRDF_func.BRDF_type) {
+        switch (brdf.BRDF_type) {
             case LAMBERTIAN: {
                 std::uniform_real_distribution<> disAngle(0.0, M_PI);
-                glm::vec3 normal = tri.getNormal();
-                double incOffset = glm::orientedAngle(glm::normalize(glm::vec2(normal.x, normal.z)),
+                //glm::vec3 normal = obj->getNormal();
+                double incOffset = glm::orientedAngle(glm::normalize(glm::vec2(objNormal.x, objNormal.z)),
                                                           glm::normalize(glm::vec2(0.0, 1.0)));
-                double asiOffset = glm::orientedAngle(glm::normalize(glm::vec2(normal.x, normal.y)),
+                double asiOffset = glm::orientedAngle(glm::normalize(glm::vec2(objNormal.x, objNormal.y)),
                                                       glm::normalize(glm::vec2(0.0, 1.0)));
                 double randAsi = 2.0 * disAngle(rd);
                 double randInc = disAngle(rd);
@@ -189,26 +190,27 @@ glm::dvec3 camera::createRayPath(ray rayarg) {
                 color *= IMPORTANCE;
 
                 ray shadowray;
-                Triangle dummy;
+                BRDF brdfDummy;
                 for(int i=0; i<N_SHADOWRAYS;i++) {
                     shadowray = scene.sampleShadowray(intersectpoint);
                     float lightdistance = glm::length(shadowray.endPoint - shadowray.startPoint);
-                    if(scene.intersectedTriangle(shadowray, intersectdistance, intersectpoint, dummy)){
+                    scene.intersectedObject(shadowray, intersectdistance, intersectpoint, brdfDummy, objNormal);
                         if(intersectdistance > lightdistance){
-                            double incAngle = abs(glm::angle(glm::normalize(tri.getNormal()),
-                                                             glm::normalize(glm::vec3(-rayarg.getDirection()))));
-                            double shadowAngle = abs(glm::angle(glm::normalize(tri.getNormal()),
+                            double incAngle = abs(glm::angle(glm::normalize(objNormal),
+                                                             glm::normalize(glm::vec3(rayarg.getDirection()))));
+                            double shadowAngle = abs(glm::angle(glm::normalize(objNormal),
                                                                 glm::normalize(glm::vec3(shadowray.getDirection()))));
 
-                            double lightfraction = glm::fastCos(shadowAngle)  * glm::fastCos(incAngle);
+                            double lightfraction = glm::fastCos(shadowAngle);  //* glm::fastCos(incAngle);
 
-                            color += glm::dvec3(tri.getColor().r * lightfraction * scene.light.lightcolor.r,
-                                                tri.getColor().g * lightfraction * scene.light.lightcolor.g,
-                                                tri.getColor().b * lightfraction * scene.light.lightcolor.b);
+                            color += glm::dvec3(brdf.color.r * lightfraction * scene.light.lightcolor.r,
+                                                brdf.color.g * lightfraction * scene.light.lightcolor.g,
+                                                brdf.color.b * lightfraction * scene.light.lightcolor.b);
+
                         }
-                    }
-                }
 
+                }
+                color /= N_SHADOWRAYS;
                 return color;
             }
             case SPECULAR: {

@@ -8,15 +8,17 @@
 Sphere::Sphere(glm::vec4 sPosition, float sRadius, glm::dvec3 sColor):
     position{sPosition}, radius{sRadius}, color{sColor}
 {
-    BRDF_function.BRDF_type = LAMBERTIAN;
+    BRDF_func.BRDF_type = LAMBERTIAN;
+    BRDF_func.color = sColor;
 }
 
-glm::vec4 Sphere::sphereIntersection(ray rayarg) {
+glm::vec4 Sphere::rayIntersection(ray rayarg, float &t) {
 
 
     glm::vec3 rayDirection = glm::normalize(glm::vec3(rayarg.endPoint - rayarg.startPoint));
+    t = FLT_MAX;
 
-    glm::vec3 L = position - rayDirection;
+    glm::vec3 L = glm::vec3(position) - rayDirection;
 
     float tca = glm::dot(L, rayDirection);
 
@@ -44,17 +46,22 @@ glm::vec4 Sphere::sphereIntersection(ray rayarg) {
             return glm::vec4(0.0f, 0.0f, 0.0f, -1.0f);
     }
 
-    float t = t0;
+     t = t0;
 
-    return rayarg.startPoint + glm::vec4(rayDirection * t, 1.0f);
+    glm::vec4 hitPoint = rayarg.startPoint + glm::vec4(rayDirection * t, 1.0f);
+
+    calcNormal(glm::vec3(hitPoint));
+
+
+    return hitPoint;
 
 
 
 }
 
-glm::vec3 Sphere::getNormal(glm::vec3 pHit)
+void Sphere::calcNormal(glm::vec3 pHit)
 {
-    return glm::normalize(pHit - glm::vec3(position));
+    normal = glm::normalize(pHit - glm::vec3(position));
 }
 
 glm::dvec3 Sphere::getColor() {

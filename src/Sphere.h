@@ -5,29 +5,39 @@
 #ifndef RAY_TRACER_SPHERE_H
 #define RAY_TRACER_SPHERE_H
 
-
+#include "SceneObject.h"
 #include <glm/glm.hpp>
-#include "Triangle.h"
 #include "constants.h"
+//#include "Triangle.h"
 
-class Sphere {
+
+class SceneObject;
+
+//struct BRDF;
+
+class Sphere : public virtual SceneObject {
 
 private:
 
-    glm::vec3 position;
-    glm::dvec3 color;
+    glm::vec4 position;
     float radius;
-    BRDF BRDF_function;
+    glm::vec3 normal;
+    glm::dvec3 color;
+
 
 public:
 
     Sphere() = default;
     Sphere(glm::vec4 sPosition, float sRadius,glm::dvec3 color);
-    glm::vec4 sphereIntersection(ray rayarg);
-    glm::vec3 getNormal(glm::vec3 pHit);
-    glm::dvec3 getColor();
 
-    ~Sphere() = default;
+    void calcNormal(glm::vec3 pHit);
+    glm::vec3 getNormal() override {return normal;}
+
+
+    ~Sphere() override = default;
+
+    glm::vec4 rayIntersection(ray rayarg, float &t) override;
+    glm::dvec3 getColor() override;
 };
 
 

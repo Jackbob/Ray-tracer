@@ -7,13 +7,18 @@
 
 
 #include <vector>
+#include "SceneObject.h"
 #include "Triangle.h"
+#include "Sphere.h"
 #include "ray.h"
 #include "glm/glm.hpp"
 #include "constants.h"
 #include <random>
 #include "glm/gtx/vector_angle.hpp"
 #include "glm/gtx/fast_trigonometry.hpp"
+
+class SceneObject;
+
 
 struct lightsource {
 public:
@@ -27,7 +32,11 @@ public:
 class Scene {
 
 private:
-    std::vector<Triangle> triangles;
+    //std::vector<SceneObject*> sceneO;
+    //std::vector<Triangle> triangles;
+    //std::vector<Sphere> spheres;
+    std::vector<SceneObject*> objects;
+
 
 public:
     lightsource light;
@@ -35,9 +44,9 @@ public:
     ray sampleShadowray(glm::vec4 fromPoint);
 
     Scene() = default;
-    ~Scene()  = default;
+    ~Scene();
 
-    bool intersectedTriangle(ray rayarg, float &t, glm::vec4 &intersectpoint, Triangle &tri);
+    bool intersectedObject(ray rayarg, float &t, glm::vec4 &intersectpoint, BRDF &brdf, glm::vec3 &objNormal);
 
     void createRoom();
 
