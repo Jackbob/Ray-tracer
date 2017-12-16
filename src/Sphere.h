@@ -28,7 +28,7 @@ private:
 public:
 
     Sphere() = default;
-    Sphere(glm::vec4 sPosition, float sRadius,glm::dvec3 color);
+    Sphere(glm::vec4 sPosition, float sRadius,glm::dvec3 color, int BRDFType);
 
     void calcNormal(glm::vec3 pHit);
     glm::vec3 getNormal() override {return normal;}

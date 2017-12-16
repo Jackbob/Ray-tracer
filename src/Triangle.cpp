@@ -9,10 +9,10 @@
 
 
 
-Triangle::Triangle(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3, glm::dvec3 c):
+Triangle::Triangle(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3, glm::dvec3 c, int BRDFType):
 vertex1{v1}, vertex2{v2}, vertex3{v3}, color{c}, normal{calculateNormal(v1,v2,v3)}
 {
-    BRDF_func.BRDF_type = LAMBERTIAN;
+    BRDF_func.BRDF_type = BRDFType;
     BRDF_func.color = c;
 }
 

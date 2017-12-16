@@ -169,7 +169,7 @@ glm::dvec3 camera::createRayPath(ray rayarg) {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<> dis(0.0, 1.0);
-    if (dis(gen) > ABSORPTION_CHANCE) {
+
         switch (brdf.BRDF_type) {
             case LAMBERTIAN: {
                 std::uniform_real_distribution<> disAngle(0.0, M_PI);
@@ -185,9 +185,11 @@ glm::dvec3 camera::createRayPath(ray rayarg) {
                                               glm::fastCos(randInc + incOffset), 1.0);
 
                 ray reflRay = ray(intersectpoint, intersectpoint + reflDir, glm::dvec3(0.0));
-                glm::dvec3 color;
-                color = createRayPath(reflRay);
-                color *= IMPORTANCE;
+                glm::dvec3 color(0.0);
+                if (dis(gen) > ABSORPTION_CHANCE) {
+                    color = createRayPath(reflRay);
+                    color *= IMPORTANCE;
+                }
 
                 ray shadowray;
                 BRDF brdfDummy;
@@ -196,12 +198,11 @@ glm::dvec3 camera::createRayPath(ray rayarg) {
                     float lightdistance = glm::length(shadowray.endPoint - shadowray.startPoint);
                     scene.intersectedObject(shadowray, intersectdistance, intersectpoint, brdfDummy, objNormal);
                         if(intersectdistance > lightdistance){
-                            double incAngle = abs(glm::angle(glm::normalize(objNormal),
-                                                             glm::normalize(glm::vec3(rayarg.getDirection()))));
-                            double shadowAngle = abs(glm::angle(glm::normalize(objNormal),
-                                                                glm::normalize(glm::vec3(shadowray.getDirection()))));
 
-                            double lightfraction = glm::fastCos(shadowAngle);  //* glm::fastCos(incAngle);
+                            double shadowAngle = glm::angle(glm::normalize(objNormal),
+                                                            glm::normalize(glm::vec3(shadowray.getDirection())));
+
+                            double lightfraction = glm::fastSin(shadowAngle);
 
                             color += glm::dvec3(brdf.color.r * lightfraction * scene.light.lightcolor.r,
                                                 brdf.color.g * lightfraction * scene.light.lightcolor.g,
@@ -214,11 +215,11 @@ glm::dvec3 camera::createRayPath(ray rayarg) {
                 return color;
             }
             case SPECULAR: {
-
+                glm::vec4 newDir = glm::vec4(glm::reflect(glm::vec3(rayarg.getDirection()), objNormal), 1.0);
+                return createRayPath(ray(intersectpoint, intersectpoint+newDir, glm::dvec3(0.0)) );
             }
             default:
                 break;
         }
         return glm::dvec3(0.0);
-    }
 }

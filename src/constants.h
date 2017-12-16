@@ -10,7 +10,7 @@
 #define SCREEN_WIDTH 500
 #define SCREEN_HEIGHT 500
 //Rays per pixel
-#define ANTIALIASING 2
+#define ANTIALIASING 4
 //Chance of rays being absorbed by surface
 #define ABSORPTION_CHANCE 0.3
 //Fraction of importance from a ray reflection

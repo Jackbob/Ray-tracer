@@ -5,10 +5,10 @@
 #include "Sphere.h"
 
 
-Sphere::Sphere(glm::vec4 sPosition, float sRadius, glm::dvec3 sColor):
+Sphere::Sphere(glm::vec4 sPosition, float sRadius, glm::dvec3 sColor , int BRDFType):
     position{sPosition}, radius{sRadius}, color{sColor}
 {
-    BRDF_func.BRDF_type = LAMBERTIAN;
+    BRDF_func.BRDF_type = BRDFType;
     BRDF_func.color = sColor;
 }
 
