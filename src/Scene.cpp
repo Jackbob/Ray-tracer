@@ -16,7 +16,7 @@ bool Scene::intersectedObject(ray rayarg, float &t, glm::vec4 &intersectpoint, B
                 if(t < length){
                     length = t;
                     brdf = i->BRDF_func;
-                    objNormal = i->getNormal();
+                    objNormal = i->getNormal(glm::vec3(testpoint));
                     intersectpoint = testpoint;
                 }
             }
@@ -34,7 +34,7 @@ ray Scene::sampleShadowray(glm::vec4 fromPoint) {
                                              light.position.z,
                                              light.position.w);
 
-    return ray(fromPoint, light_sample_point, glm::dvec3(0.0));
+    return ray(fromPoint, light_sample_point);
 }
 
 void Scene::createRoom() {
@@ -74,12 +74,14 @@ void Scene::createRoom() {
     objects.emplace_back(new Triangle(glm::vec4(13,0,5,1), glm::vec4(13,0,-5,1), glm::vec4(10,-6,-5,1), glm::dvec3(0.0,1.0,0.0), SPECULAR));
     objects.emplace_back(new Triangle(glm::vec4(13,0,5,1), glm::vec4(10,-6,-5,1), glm::vec4(10,-6,5,1), glm::dvec3(0.0,1.0,0.0), SPECULAR));
 
-    objects.emplace_back(new Sphere(glm::vec4(10, 0, 0, 1), 2, glm::dvec3(0.5, 0.5, 0.5), LAMBERTIAN));
+    objects.emplace_back(new Sphere(glm::vec4(10, 4, -5, 1), 2.0, glm::dvec3(0.8, 0.4, 0.4), LAMBERTIAN));
 
-    light.width = 1;
-    light.breadth = 1;
+    objects.emplace_back(new Sphere(glm::vec4(12, -4, -3, 1), 1.5, glm::dvec3(0.5, 0.5, 0.5), TRANSPERANT));
+
+    light.width = 1.0;
+    light.breadth = 1.0;
     light.lightcolor = glm::dvec3(1.0,0.94,0.88);
-    light.position = glm::vec4(5.0, 0.0, 4.9, 1.0);
+    light.position = glm::vec4(5.0, 0.0, 4.5, 1.0);
 
 }
 

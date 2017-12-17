@@ -48,10 +48,6 @@ int main() {
     std::cout << "Render time: " << time_span.count() << " ms,   ";
     std::cout << (int)(time_span.count() / (1000 * 60)) << "m " << ((int)time_span.count() / 1000)%60 << "s" << std::endl;
 
-    double asiOffset = glm::orientedAngle(glm::normalize(glm::vec2(1.0,0.0)),
-                                          glm::normalize(glm::vec2(1.0,1.0)));
-    std::cout << asiOffset << std::endl;
-
     do{
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -67,7 +63,6 @@ int main() {
     } // Check if the ESC key was pressed or the window was closed
     while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
            glfwWindowShouldClose(window) == 0 );
-
 
     return 0;
 }

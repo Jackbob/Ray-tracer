@@ -32,6 +32,7 @@ public:
 
     void calcNormal(glm::vec3 pHit);
     glm::vec3 getNormal() override {return normal;}
+    glm::vec3 getNormal(glm::vec3 pHit) override {calcNormal(pHit); return normal;}
 
 
     ~Sphere() override = default;

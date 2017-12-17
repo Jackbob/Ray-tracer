@@ -31,14 +31,15 @@ public:
 
     glm::vec3 calculateNormal(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3);
     glm::vec3 getNormal() override {return normal;}
+    glm::vec3 getNormal(glm::vec3 pHit) override {return normal;}
 
     //Destructor
-    ~Triangle() = default;
+    ~Triangle() override = default;
 
     /*should compute the intersection between a ray and a triangle
       with the Möller- Trumbore algorithm*/
-    glm::vec4 rayIntersection(ray rayarg, float &t);
-    glm::dvec3 getColor();
+    glm::vec4 rayIntersection(ray rayarg, float &t) override;
+    glm::dvec3 getColor() override;
 };
 
 

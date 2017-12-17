@@ -20,6 +20,7 @@ public:
 
     ray() = default;
     ray(glm::vec4 start, glm::vec4 end, glm::dvec3 color);
+    ray(glm::vec4 start, glm::vec4 end);
 
     ~ray() = default;
 

@@ -35,6 +35,7 @@ public:
     virtual glm::vec4 rayIntersection(ray rayarg, float &t) = 0;
 
     virtual glm::vec3 getNormal() = 0;
+    virtual glm::vec3 getNormal(glm::vec3 pHit) = 0;
 
     virtual glm::dvec3 getColor() = 0;
 

@@ -162,7 +162,7 @@ glm::dvec3 camera::createRayPath(ray rayarg) {
     glm::vec4 intersectpoint = glm::vec4(0.0,0.0,0.0,-1.0f);
     float intersectdistance;
     BRDF brdf;
-    glm::vec3 objNormal{};
+    glm::vec3 objNormal;
     if (!scene.intersectedObject(rayarg, intersectdistance, intersectpoint, brdf, objNormal))
         return glm::dvec3(0.0);
 
@@ -173,9 +173,9 @@ glm::dvec3 camera::createRayPath(ray rayarg) {
         switch (brdf.BRDF_type) {
             case LAMBERTIAN: {
                 std::uniform_real_distribution<> disAngle(0.0, M_PI);
-                //glm::vec3 normal = obj->getNormal();
+
                 double incOffset = glm::orientedAngle(glm::normalize(glm::vec2(objNormal.x, objNormal.z)),
-                                                          glm::normalize(glm::vec2(0.0, 1.0)));
+                                                      glm::normalize(glm::vec2(0.0, 1.0)));
                 double asiOffset = glm::orientedAngle(glm::normalize(glm::vec2(objNormal.x, objNormal.y)),
                                                       glm::normalize(glm::vec2(0.0, 1.0)));
                 double randAsi = 2.0 * disAngle(rd);
@@ -191,32 +191,51 @@ glm::dvec3 camera::createRayPath(ray rayarg) {
                     color *= IMPORTANCE;
                 }
 
-                ray shadowray;
+                glm::vec4 shadowIntersect;
+                float shadowDistance;
                 BRDF brdfDummy;
+                glm::vec3 dummyNormal;
                 for(int i=0; i<N_SHADOWRAYS;i++) {
-                    shadowray = scene.sampleShadowray(intersectpoint);
-                    float lightdistance = glm::length(shadowray.endPoint - shadowray.startPoint);
-                    scene.intersectedObject(shadowray, intersectdistance, intersectpoint, brdfDummy, objNormal);
-                        if(intersectdistance > lightdistance){
+                    ray shadowray = scene.sampleShadowray(intersectpoint);
+                    float lightdistance = glm::length(glm::vec3(shadowray.endPoint) - glm::vec3(intersectpoint));
+                    scene.intersectedObject(shadowray, shadowDistance, shadowIntersect, brdfDummy, dummyNormal);
+                        //return glm::dvec3(0.0);
 
-                            double shadowAngle = glm::angle(glm::normalize(objNormal),
-                                                            glm::normalize(glm::vec3(shadowray.getDirection())));
+                    if(shadowDistance > lightdistance){
 
-                            double lightfraction = glm::fastSin(shadowAngle);
+                        double shadowAngle = glm::angle(glm::normalize(objNormal),
+                                                        glm::normalize(glm::vec3(shadowray.getDirection())));
+                        double lightfraction;
+                        if(shadowAngle > 1.57)
+                            lightfraction = 0;
+                        else
+                            lightfraction = glm::fastCos(shadowAngle);
 
-                            color += glm::dvec3(brdf.color.r * lightfraction * scene.light.lightcolor.r,
-                                                brdf.color.g * lightfraction * scene.light.lightcolor.g,
-                                                brdf.color.b * lightfraction * scene.light.lightcolor.b);
-
-                        }
+                        color += glm::dvec3(brdf.color.r * lightfraction * scene.light.lightcolor.r,
+                                            brdf.color.g * lightfraction * scene.light.lightcolor.g,
+                                            brdf.color.b * lightfraction * scene.light.lightcolor.b);
+                    }
 
                 }
-                color /= N_SHADOWRAYS;
                 return color;
             }
             case SPECULAR: {
                 glm::vec4 newDir = glm::vec4(glm::reflect(glm::vec3(rayarg.getDirection()), objNormal), 1.0);
-                return createRayPath(ray(intersectpoint, intersectpoint+newDir, glm::dvec3(0.0)) );
+                return createRayPath(ray(intersectpoint, intersectpoint+newDir) );
+            }
+            case TRANSPERANT:{
+                glm::dvec3 color(0.0);
+                float ind;
+                if(glm::angle(glm::normalize(objNormal), glm::normalize(glm::vec3(rayarg.getDirection()))) > 1.57)
+                    ind = 1.5f;
+                else
+                    ind = 1.0f/1.5f;
+
+                glm::vec4 refracted = glm::vec4(glm::refract(glm::vec3(rayarg.getDirection()), objNormal, ind), 1.0);
+                glm::vec4 reflect = glm::vec4(glm::reflect(glm::vec3(rayarg.getDirection()), objNormal), 1.0);
+                color += createRayPath(ray(intersectpoint, intersectpoint+refracted)) * 0.7;
+                color += createRayPath(ray(intersectpoint, intersectpoint+reflect)) * 0.3;
+                return color;
             }
             default:
                 break;

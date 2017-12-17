@@ -56,7 +56,7 @@ glm::vec3 Triangle::calculateNormal(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3) {
     glm::vec3 b = glm::vec3(v2.x, v2.y, v2.z);
     glm::vec3 c = glm::vec3(v3.x, v3.y, v3.z);
 
-    return glm::normalize(glm::cross(c-a, b-a));
+    return glm::normalize(-glm::cross(c-a, b-a));
 }
 
 glm::dvec3 Triangle::getColor() {
